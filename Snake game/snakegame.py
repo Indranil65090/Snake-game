@@ -9,9 +9,10 @@ pygame.init()
 white = (255, 255, 255)
 red = (255, 0, 0)
 black = (0, 0, 0)
+blue = (0,0,255)
 
 # Creating window
-screen_width = 900
+screen_width =  900
 screen_height = 600
 gameWindow = pygame.display.set_mode((screen_width, screen_height))
 
@@ -35,7 +36,7 @@ def  plot_snake(gameWindow, color, snk_list, snake_size):
 def welcome():
     exit_game=False
     while not exit_game:
-        gameWindow.fill((233,220,229))
+        gameWindow.fill((253,242,18))
         text_score("Welcome to Snake game",black,230,250)
         text_score("Press Space Bar To Play", black, 232, 292)
         for event in pygame.event.get():
@@ -43,8 +44,6 @@ def welcome():
                 exit_game = True
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    pygame.mixer.music.load('snake.mp3')
-                    pygame.mixer.music.play()
                     gameloop()
 
         pygame.display.update()
@@ -78,7 +77,7 @@ def gameloop():
         if game_over:
             with open("HighScore.txt", "w") as f:
                 f.write(str(highscore))
-            gameWindow.fill(white)
+            gameWindow.fill(black)
             text_score("Game over!!! Press Enter to continue", red, 100, 300)
 
             for event in pygame.event.get():
@@ -116,15 +115,16 @@ def gameloop():
 
             if abs(snake_x - food_x)<8 and abs(snake_y - food_y)<8:
                 score += 10
-
+                pygame.mixer.music.load('beep.mp3')
+                pygame.mixer.music.play()
                 food_x = random.randint(20, screen_width / 2)
                 food_y = random.randint(20, screen_height / 2)
                 snk_length+=5
                 if score>int(highscore):
                     highscore=score
 
-            gameWindow.fill(white)
-            text_score("Score: " + str(score)+"  High Score: "+str(highscore), black, 5, 5)
+            gameWindow.fill(black)
+            text_score("Score: " + str(score)+"  High Score: "+str(highscore), white, 5, 5)
             pygame.draw.rect(gameWindow, red, [food_x, food_y, snake_size, snake_size])
 
             head = []
@@ -144,7 +144,7 @@ def gameloop():
                 game_over=True
                 pygame.mixer.music.load('explosion.mp3')
                 pygame.mixer.music.play()
-            plot_snake(gameWindow, black, snk_list, snake_size)
+            plot_snake(gameWindow, blue, snk_list, snake_size)
         pygame.display.update()
         clock.tick(fps)
 
